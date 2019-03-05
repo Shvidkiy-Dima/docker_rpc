@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+
+</head>
+<body>
+
+  <script type="text/x-template" id="modal-template">
+  <transition name="error-modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+             Something went wrong...
+
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+
+            </slot>
+          </div>
+            <div class="modal-body">
+                <slot name="footer">
+                </slot>
+            </div>
+          <div class="modal-footer">
+              <button class="modal-default-button" @click="$emit('close')">
+                 OK
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</script>
+
+
+
+<div id="app">
+
+
+
+
+
+  <error-modal v-if="showModal" @close="showModal = false">
+    <h4 slot="body" v-text="app.error_name"></h4>
+    <h5 class="text-danger" v-text="app.error_msg"style="font-size: 12px" slot="footer"></h5>
+  </error-modal>
+
+    <div class="container-fluid">
+        <div class="row justify-content-md-center px-4">
+            <div class="col-6 border-right">
+                <ul class="nav">
+                    <li class="nav-item pt-2">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseImages" role="button" aria-expanded="false" aria-controls="collapseImages">
+                            Filter
+                        </a>
+                    </li>
+                    <li class="nav-item pl-5 text-center">
+                        <h1 class="text-center"><strong>Images</strong></h1>
+                    </li>
+                </ul>
+            <div class="collapse" id="collapseImages">
+                <filter_images>
+                </filter_images>
+            </div>
+            <table>
+                <td>
+                    <div v-html="info_images">
+                    </div>
+                    <div v-for="(image, index) in images" :key="index" :is="image['type']" :id="image.docker_image.id"
+                         :created="image.docker_image.created"
+                         :tags="image.docker_image.tags"
+                         :repo="image.docker_image.repo"
+                         :size="image.docker_image.size"
+                         :load="image.load" :index="index"
+                         :short_id="image.docker_image.short_id">
+                    </div>
+                </td>
+            </table>
+            </div>
+            <div class="col-6">
+                <ul class="nav">
+                    <li class="nav-item pt-2">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseContainers" role="button" aria-expanded="false" aria-controls="collapseContainers">
+                            Filter
+                        </a>
+                    </li>
+                    <li class="nav-item pl-5 text-center">
+                        <h1 class="text-center"><strong>Containers</strong></h1>
+                    </li>
+                </ul>
+                <div class="collapse" id="collapseContainers">
+                    <filter_containers>
+                    </filter_containers>
+                </div>
+                <table>
+                    <td>
+                        <div v-html="info_containers">
+                        </div>
+                        <div v-for="(container, index) in containers" :key="index"
+                        :is="container['type']" :id="container.container.id"
+                                :created="container.container.created"
+                                :name="container.container.name"
+                                :command="container.container.command"
+                                :ports="container.container.ports"
+                                :status="container.container.status"
+                                :index="index"
+                                :load="container.load"
+                                :image="container.container.image">
+                        </div>
+                    </td>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <link rel="stylesheet" href="index.css?v=1">
+  <script src="WebSocket.js?v=1"></script>
+</body>
+</html>
