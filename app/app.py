@@ -2,11 +2,12 @@ from tornado.web import Application, RequestHandler
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
-
-from api import DockerHandler
 from settings import Settings
+from api import DockerHandler
 
 import argparse
+
+
 
 
 class Index(RequestHandler):
@@ -30,7 +31,7 @@ if __name__ == '__main__':
 
     app = MyApp()
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', default=8000)
+    parser.add_argument('--port', default=Settings.PORT)
     port = int(parser.parse_args().port)
 
     server = HTTPServer(app)

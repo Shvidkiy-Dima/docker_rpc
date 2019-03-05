@@ -1,20 +1,8 @@
 
-
-from tornado.options import define, options
-
-
-define('test', '12')
-
-print(options.items())
-
-
-
-
-
 class Settings:
-    TEMPLATE_PATH = 'templates'
-    DATE_FORMAT = '%H:%M_%d-%m-%Y'
+    PORT = 8000
     ORIGIN_DOMAINS = ['localhost']
+    TEMPLATE_PATH = 'templates'
 
     @classmethod
     def get_settings(cls):

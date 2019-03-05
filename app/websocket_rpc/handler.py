@@ -1,5 +1,4 @@
 from tornado.websocket import WebSocketHandler, WebSocketClosedError
-from tornado.concurrent import Future
 from concurrent.futures import ThreadPoolExecutor
 from tornado.ioloop import IOLoop
 from tornado.locks import Lock
@@ -10,20 +9,22 @@ from .logs import logger
 
 import os
 
-
-
-
-
 class WebSocketRpcHandler(WebSocketHandler):
-    ROUTES = {}
+    ROUTES = {}   # Collection route objs. Must be overridden.
+
     loop = IOLoop.current()
     loop.set_default_executor(ThreadPoolExecutor(max_workers=os.environ.get('MAX_THREADS')))
 
 
     def resolve_method(self, data):
         method_name = data.get('method')
+
+        # get requested route
         route = self.ROUTES.get(method_name)
+
+        # if route exists create new route obj and return method or 0
         method = route()._resolve() if route else 0
+
         if not method:
             logger.error('Method %s not implemented' % method_name)
             raise NotImplementedError('Method %s not implemented: client %s' % (method_name, self))
@@ -36,10 +37,11 @@ class WebSocketRpcHandler(WebSocketHandler):
 
 
     async def open(self, *args, **kwargs):
-        self.lock = Lock()
+        self.lock = Lock() # One client - One lock
         logger.info('Client connected: %s' % self)
 
     def _send(self, **kwargs):
+        """ send message to client: kwargs - json or dict"""
         try:
             self.write_message(kwargs)
         except WebSocketClosedError as e:
@@ -48,6 +50,7 @@ class WebSocketRpcHandler(WebSocketHandler):
 
 
     def send_error(self, e):
+        """ parse and send error """
         error = {'name': type(e).__name__, 'msg': str(e)}
         logger.error('Error %(name)s: %(msg)s' % error)
         self._send(version=self.VERSION, type='error', result=error)
@@ -68,15 +71,15 @@ class WebSocketRpcHandler(WebSocketHandler):
 
 
     async def _thread_executor(self, method, *args, **kwargs):
+        """ Execute blocking func in thread  """
         loop = IOLoop.current()
         result = await loop.run_in_executor(None, partial(method, *args, **kwargs))
         return result
 
 
     async def _executor(self, method, *args, **kwargs):
+        """ Execute func """
         result = method(*args, **kwargs)
-        if isinstance(result, Future):
-            result = await result
         return result
 
     def __str__(self):

@@ -11,21 +11,25 @@ class BaseDocker:
         self.client = docker.from_env()
 
     def delete(self, container_id):
+        """ delete container """
         c = self.client.containers.get(container_id)
         c.remove()
 
 
     def stop(self, container_id):
+        """ stop container """
         c = self.client.containers.get(container_id)
         c.stop()
 
 
     def start(self, container_id):
+        """ start container """
         c = self.client.containers.get(container_id)
         c.start()
 
 
     def run(self, image_id):
+        """ run container """
         c = self.client.containers.run(image_id, detach=True)
         if c.status == 'created': c.reload()
         return c
@@ -40,11 +44,13 @@ class SerializeDocker(SerializeDockerMixin, BaseDocker):
         super().__init__()
 
     def return_data(self, data):
+        """ return json or python dict """
         if self.to_json:
             data = json.dumps(data)
         return data
 
     def run(self, image_id):
+        """ run container and return serialize obj """
         i = self.client.images.get(image_id)
         name = self.get_repo(i.tags)['repo']
         container = super().run(name if name != 'None' else image_id)
@@ -52,16 +58,19 @@ class SerializeDocker(SerializeDockerMixin, BaseDocker):
 
 
     def get_container_from_id(self, c_id):
+        """ return serialize obj from container """
         c = self.client.containers.get(c_id)
         return self.return_data(self.make_container(c))
 
 
     def get_containers(self, **params):
+        """ get containers - filter(**params)"""
         params = self.pars_params(params)
         data = [self.make_container(c) for c in self.client.containers.list(**params)]
         return self.return_data(data)
 
     def get_images(self, **params):
+        """ get images - filter(**params)"""
         params = self.pars_params(params)
         data = [self.make_image(i) for i in self.client.images.list(**params)]
         return self.return_data(data)

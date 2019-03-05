@@ -5,6 +5,7 @@ from docker_utils.serializer import SerializeDocker
 from info import info
 
 from urllib.parse import urlparse
+from settings import Settings
 
 class DockerRoute(WebSocketRpcRoute):
 
@@ -41,24 +42,29 @@ class DockerRoute(WebSocketRpcRoute):
         logger.info('\nContainer %s was deleted!\n' % id)
 
 
-from tornado.options import options
+
 class DockerHandler(WebSocketRpcHandler):
     VERSION = '1.0'
 
     def check_origin(self, origin):
+        """ check only domain without port or ORIGIN_DOMAINS from settings"""
         origin = urlparse(origin).hostname or ''
-        host = urlparse(self.request.headers.get("Host")).hostname
-        print(origin, host, options.items(), '---------------------------------')
-        return True
-        # return origin == host and origin in
+        host = self.request.headers.get("Host").split(':')[0]
+        return origin == host or origin in Settings.ORIGIN_DOMAINS
 
-DockerHandler.ROUTES['info'] = DockerRoute.route(method='info')
+########## ROUTES ##########################
 
-DockerHandler.ROUTES['get_images'] = DockerRoute.route(method='get_images',  in_thread=True)
-DockerHandler.ROUTES['get_containers'] = DockerRoute.route(method='get_containers', in_thread=True)
+"""
+on_message(request)-> DockerHandler.ROUTES['method']()-> DockerHandlerInstance._resolve()-> method()-> _send(response)
+"""
 
-DockerHandler.ROUTES['run_container'] = DockerRoute.route(method='run_container',  in_thread=True)
-DockerHandler.ROUTES['stop_container'] = DockerRoute.route(method='stop_container',  in_thread=True)
-DockerHandler.ROUTES['start_container'] = DockerRoute.route(method='start_container',  in_thread=True)
-DockerHandler.ROUTES['delete_container'] = DockerRoute.route(method='delete_container',  in_thread=True)
+DockerHandler.ROUTES['info'] = DockerRoute.route(method_name='info')
+
+DockerHandler.ROUTES['get_images'] = DockerRoute.route(method_name='get_images',  in_thread=True)
+DockerHandler.ROUTES['get_containers'] = DockerRoute.route(method_name='get_containers', in_thread=True)
+
+DockerHandler.ROUTES['run_container'] = DockerRoute.route(method_name='run_container',  in_thread=True)
+DockerHandler.ROUTES['stop_container'] = DockerRoute.route(method_name='stop_container',  in_thread=True)
+DockerHandler.ROUTES['start_container'] = DockerRoute.route(method_name='start_container',  in_thread=True)
+DockerHandler.ROUTES['delete_container'] = DockerRoute.route(method_name='delete_container',  in_thread=True)
 

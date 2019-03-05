@@ -9,6 +9,7 @@ import json
 
 @contextmanager
 def error_handler(callback):
+    # Call callback and put error
     try:
         yield
     except Exception as e:
@@ -22,7 +23,7 @@ def from_json(data):
 
 
 def get_params(data):
-    # [], {}, n
+    """Expected collections [], {} or append object in list"""
     args, kwargs = [], {}
     if data:
         if isinstance(data, dict):
