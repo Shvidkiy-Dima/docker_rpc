@@ -1,6 +1,6 @@
 # Docker rpc-server
 
-Async rpc-server and docker handler
+Async rpc-server for working with dock containers and docker images
 
 ## Features
 * Uses websocket as a transport
