@@ -37,7 +37,7 @@ const Image =  '<div class="card"><div class="card-body px-0  py-1"><table class
 ' <button   v-show=!load :id=id  :data-action=index @click="handler" class="btn btn-sm btn-danger float-right mr-2"> Run</button></div></div>' +
 '<transition name="fade"> <p v-if="!load">привет</p> </transition>'
 
-const EmptyTemplate =  '<h1>Empty stack</h1>'
+const EmptyTemplate =  '<h1>Nothing found</h1>'
 
 const FilterContainers =  '<form @submit.prevent="onSubmit"> <p> <label for="name">Name:</label> <input id="name" v-model="name" placeholder="name">' +
     '</p> <p> <label for="review">Ancestor:</label> <input id="ancestor" v-model="ancestor" placeholder="ancestor">' +
@@ -328,7 +328,6 @@ var app = new Vue({
 
             set_containers:function (data, type) {
                     data.forEach(function push(item, index) {
-                    app.count_containers += 1
                     index = app.containers.push({'container': {
                            'id': item['container_id'],
                            'created': item['created'],
@@ -396,7 +395,8 @@ var app = new Vue({
           run: function(index, id) {
                 this.id += 1
                 callback = function(data) {
-                              if (app.count_containers == 0) {
+                                console.log(app.containers.length)
+                              if (app.containers.length == 0) {
                                     app.info_containers = ''
                               }
                               app.set_containers([data], 'running_container')

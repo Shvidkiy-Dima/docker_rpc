@@ -23,7 +23,7 @@ def from_json(data):
 
 
 def get_params(data):
-    """Expected collections [], {} or append object in list"""
+    """Expected [], {} or append object in list"""
     args, kwargs = [], {}
     if data:
         if isinstance(data, dict):
