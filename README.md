@@ -3,11 +3,11 @@
 Async rpc-server and docker handler
 
 ## Features
-* Stateless
 * Uses websocket as a transport
 * Asynchronous server-side functions
 * Blocking functions are performed in threads
 * Serializes docker containers and images to json or python dict
+* Provides actions on docker images and containers: filter, run, stop, start, delete
 
 ## Installation
 
