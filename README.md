@@ -16,3 +16,12 @@ These instructions will get you a copy of the project up and running on your loc
 5. cd into app
 6. launch project: python app.py
 7. Go to http://localhost:8000/
+
+# Running the tests
+
+cd into docker_rpc/app
+
+RUN
+```
+python test_api.py
+```
