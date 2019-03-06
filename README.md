@@ -2,6 +2,11 @@
 
 Async rpc-server and docker handler
 
+# Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+
+
 # Installation
 
 1. Clone this repository: git clone https://github.com/BorisovDima/docker_rpc.git
