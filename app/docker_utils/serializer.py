@@ -58,7 +58,7 @@ class SerializeDocker(SerializeDockerMixin, BaseDocker):
 
 
     def get_container_from_id(self, c_id):
-        """ return serialize obj from container """
+        """ serialize obj from container """
         c = self.client.containers.get(c_id)
         return self.return_data(self.make_container(c))
 
