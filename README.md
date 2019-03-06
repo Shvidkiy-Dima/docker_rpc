@@ -2,12 +2,12 @@
 
 Async rpc-server and docker handler
 
-# Getting Started
+## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 
-# Installation
+## Installation
 
 1. Clone this repository: git clone https://github.com/BorisovDima/docker_rpc.git
 2. cd into docker_rpc
@@ -17,7 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 6. launch project: python app.py
 7. Go to http://localhost:8000/
 
-# Running the tests
+## Running the tests
 
 cd into docker_rpc/app
 
