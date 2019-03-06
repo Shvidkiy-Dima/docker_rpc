@@ -10,6 +10,8 @@ from .logs import logger
 import os
 
 class WebSocketRpcHandler(WebSocketHandler):
+    """ Object that establishes a connection with a client and handle msgs """
+
     ROUTES = {}   # Collection route objs. Must be overridden.
 
     loop = IOLoop.current()

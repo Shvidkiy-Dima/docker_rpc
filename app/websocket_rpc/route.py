@@ -1,5 +1,6 @@
 
 class WebSocketRpcRoute:
+    """ Object that provides API methods """
 
     def __init__(self, method_name, in_thread=False):
         """ Executable func name  and options """
