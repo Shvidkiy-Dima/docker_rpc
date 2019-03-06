@@ -6,8 +6,8 @@ upstream tornado {
 
 server {
 
-    listen 5000;
-    root /home/borisov/task/app/static;
+    listen 80;
+    root /docker_rpc/app/static/;
 
     proxy_http_version 1.1;
 

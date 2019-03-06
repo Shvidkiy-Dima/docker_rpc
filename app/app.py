@@ -1,4 +1,4 @@
-from tornado.web import Application, RequestHandler
+from tornado.web import Application,  StaticFileHandler
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
@@ -6,19 +6,15 @@ from settings import Settings
 from api import DockerHandler
 
 import argparse
+import os
 
 
-
-
-class Index(RequestHandler):
-
-    def get(self):
-        self.render('index.html')
 
 class MyApp(Application):
     def __init__(self):
-        handlers = [('/', Index),
-                    ('/ws/', DockerHandler)]
+        handlers = [('/ws/', DockerHandler),
+                    (r'/(.*)', StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), 'static'),
+                                                   'default_filename': "index.html"})]
 
         settings = Settings.get_settings()
         super().__init__(handlers=handlers, **settings)
